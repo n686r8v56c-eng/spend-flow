@@ -39,3 +39,10 @@ npm run dev
 
 ## 상태
 React UI/계정 연동 소스와 SQL/배포 구성 제공. 실제 Supabase 프로젝트 연결과 클라우드 배포는 사용자 프로젝트 키/계정 연결 뒤 수행해야 합니다.
+
+
+## 2026-10-30 UI patch
+- 전체 팔레트: 보라/화이트로 변경 (Focus Flow 참고)
+- iPhone Safari 입력 자동 확대 방지: input/select/textarea 글씨 16px 이상
+- 예산 세부 입력 시 화면 가로 밀림 방지: 카드, 내부 flex, grid 너비 제한
+- 기존 Supabase 데이터 구조/저장 동작은 변경하지 않음
