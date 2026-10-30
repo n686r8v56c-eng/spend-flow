@@ -91,3 +91,11 @@ a,a:visited{color:var(--sf-purple-deep)}
 .category-daily-budget{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:12px;padding-top:11px;border-top:1px solid var(--sf-border);font-size:12px;color:var(--sf-muted)}
 .category-daily-budget strong{color:var(--sf-purple-deep);white-space:nowrap;font-size:13px}
 @media(max-width:370px){.budget-heading-actions small{display:none}.category-daily-budget{font-size:11px}}
+
+/* Category spending total -> category budget */
+.expense-heading{margin:16px 0 10px;gap:10px}.expense-heading h3{margin:0}.expense-budget-plus{width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #dcd3ed;border-radius:11px;background:#f1ecfa;color:#7e66ae;flex:none;cursor:pointer}.expense-budget-plus:active{background:#e4dbf4}
+
+/* Category budget sorting controls */
+.budget-heading-actions .category-budget-add{flex:0 0 auto;min-width:34px;min-height:34px;font-size:16px;font-weight:700;}
+.budget-heading-actions .category-budget-add.sort-active{background:#9580c8;color:#fff;border-color:#9580c8;}
+@media(max-width:380px){.budget-heading-actions{gap:5px}.budget-heading-actions .category-budget-add{min-width:32px;min-height:32px}}
