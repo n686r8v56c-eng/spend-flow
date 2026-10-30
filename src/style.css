@@ -63,3 +63,22 @@ body {background:#faf9fd}
 .budget-controls .field{margin:0}.budget-controls input{width:100%;min-height:46px;font-size:16px!important}
 .copy-budget{width:100%;min-height:46px;font-size:12px;white-space:normal;text-align:center;padding:9px 7px;border:1px solid #ded5ec}
 @media(max-width:360px){.budget-controls{gap:7px}.copy-budget{font-size:11px}}
+
+/* Strict neutral/lavender application palette. Only category donut uses pastel spectrum. */
+:root{--sf-ink:#34313d;--sf-purple:#9179c8;--sf-purple-deep:#785bad;--sf-muted:#938c9b;--sf-border:#e8e2ef;--sf-soft:#f2eef9;--sf-bg:#faf9fd}
+html,body,#root{background:var(--sf-bg);color:var(--sf-ink)}
+button, a, select, input, textarea{accent-color:var(--sf-purple);-webkit-tap-highlight-color:transparent}
+a,a:visited{color:var(--sf-purple-deep)}
+/* Browser default link blue was leaking through unstyled button elements. */
+.cal-day,.cal-day b,.cal-day small,.catline,.catline span,.catline strong,.budget-trigger,.budget-trigger b,.budget-row .spread b,.budget-row button,.tx,.tx b,.tx strong,.detailclick,.detailclick b,.detailclick .push{color:var(--sf-ink)}
+.cal-day small{color:var(--sf-purple-deep)!important;font-size:10px;letter-spacing:-.3px;overflow-wrap:anywhere;white-space:normal}
+.cal-day.active b{color:var(--sf-purple-deep)!important}
+.catline span,.catline strong,.budget-trigger .spread b{color:var(--sf-purple-deep)!important}
+.cal-day:focus,.cal-day:active,.budget-trigger:focus,.catline:focus{outline-color:var(--sf-purple)}
+.pill.chosen,.primary,.bottomnav .addnav span{background:var(--sf-purple);border-color:var(--sf-purple);color:#fff}
+.progress>div,.tiny-bar i{background:var(--sf-purple)}
+.bottomnav button,.bottomnav button small{color:var(--sf-muted)}
+.bottomnav button.active,.bottomnav button.active small{color:var(--sf-purple-deep)}
+/* iOS prevents system blue text / default controls on calendar buttons */
+.calendar-grid button{-webkit-appearance:none;appearance:none;text-decoration:none}
+.calendar-grid button:disabled{color:var(--sf-muted)}
