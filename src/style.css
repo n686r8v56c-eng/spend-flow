@@ -82,3 +82,12 @@ a,a:visited{color:var(--sf-purple-deep)}
 /* iOS prevents system blue text / default controls on calendar buttons */
 .calendar-grid button{-webkit-appearance:none;appearance:none;text-decoration:none}
 .calendar-grid button:disabled{color:var(--sf-muted)}
+
+/* Monthly budget rollup and category daily available amount */
+.budget-heading-actions{display:flex;align-items:center;gap:10px;min-width:0}
+.budget-heading-actions small{color:var(--sf-muted);font-size:11px}
+.category-budget-add{display:inline-flex;align-items:center;justify-content:center;flex:none;width:32px;height:32px;padding:0;border:1px solid var(--sf-border);border-radius:10px;background:#f2eef9;color:var(--sf-purple-deep);cursor:pointer}
+.category-budget-add:active{background:#e5def3}
+.category-daily-budget{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:12px;padding-top:11px;border-top:1px solid var(--sf-border);font-size:12px;color:var(--sf-muted)}
+.category-daily-budget strong{color:var(--sf-purple-deep);white-space:nowrap;font-size:13px}
+@media(max-width:370px){.budget-heading-actions small{display:none}.category-daily-budget{font-size:11px}}
