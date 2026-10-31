@@ -112,3 +112,41 @@ a,a:visited{color:var(--sf-purple-deep)}
 
 /* Three-month spend history inside the budget calculator */
 .calc-history-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-bottom:12px}.calc-history-tabs button{min-width:0;border:1px solid #e7dff0;background:#fff;color:#786986;border-radius:9px;padding:9px 3px;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:12px;font-weight:650;cursor:pointer}.calc-history-tabs button.selected{background:#e9e0f7;border-color:#ad96d4;color:#7657ae}.calc-history-tabs button small{font-size:10px;font-weight:500;white-space:nowrap}.calc-history-total{padding:0 0 8px;font-size:12px}.calc-history-row>div{min-width:0;overflow-wrap:anywhere}
+
+/* Budget calculator: matching select and amount fields (iOS Safari included) */
+.plan-calculator .calc-category select,
+.plan-calculator .calc-category .calc-inputs input{
+  -webkit-appearance:none;
+  appearance:none;
+  display:block;
+  width:100%;
+  height:42px;
+  min-height:42px;
+  margin:0;
+  border:1px solid #e5dced;
+  border-radius:12px;
+  background-color:#fff;
+  color:#785eaf;
+  font-family:inherit;
+  font-size:16px;
+  font-weight:600;
+  line-height:1.35;
+  padding:9px 13px;
+  box-shadow:none;
+  outline:none;
+}
+.plan-calculator .calc-category select{
+  margin-bottom:12px;
+  padding-right:38px;
+  cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23816ab5' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  background-size:20px 20px;
+}
+.plan-calculator .calc-category select option{color:#785eaf;background:#fff}
+.plan-calculator .calc-category .calc-inputs .field{margin:0;color:#786b86;font-weight:700}
+.plan-calculator .calc-category .calc-inputs input{margin-top:7px}
+.plan-calculator .calc-category .calc-inputs input::placeholder{color:#aaa0b3;opacity:1}
+.plan-calculator .calc-category select:focus,
+.plan-calculator .calc-category .calc-inputs input:focus{border-color:#9d87d0;box-shadow:0 0 0 3px #eee9f8}
