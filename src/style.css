@@ -150,3 +150,9 @@ a,a:visited{color:var(--sf-purple-deep)}
 .plan-calculator .calc-category .calc-inputs input::placeholder{color:#aaa0b3;opacity:1}
 .plan-calculator .calc-category select:focus,
 .plan-calculator .calc-category .calc-inputs input:focus{border-color:#9d87d0;box-shadow:0 0 0 3px #eee9f8}
+
+/* 고정비 구분 필터: 가로 스크롤, 선택 색상 */
+.fixed-filter-tags{display:flex;align-items:center;gap:8px;overflow-x:auto;max-width:100%;padding:4px 1px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.fixed-filter-tags::-webkit-scrollbar{display:none}
+.fixed-filter-tag{flex:0 0 auto;white-space:nowrap;border:1px solid #e3daee;border-radius:999px;background:#fff;color:#796b88;padding:8px 15px;font-size:14px;font-weight:600;line-height:1.3;cursor:pointer}
+.fixed-filter-tag.active{background:#9079c4;border-color:#9079c4;color:#fff}
