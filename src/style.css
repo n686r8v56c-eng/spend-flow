@@ -162,3 +162,29 @@ a,a:visited{color:var(--sf-purple-deep)}
 
 /* KPI is accessible from a compact icon, leaving the Budget page unchanged. */
 .budget-top-actions{display:flex;align-items:center;gap:5px}.budget-top-actions .iconbtn{flex:0 0 auto}.kpi-launch{color:#8167bb!important}.kpi-modal-content .spend-kpi-section{margin:6px 0 3px}.kpi-modal-content .spend-kpi-section .section-heading{margin-top:4px}.kpi-modal-content .month-selector{margin-bottom:12px}.kpi-modal-content .spend-kpi-goals{grid-template-columns:repeat(2,minmax(0,1fr))}@media(max-width:390px){.kpi-modal-content .spend-kpi-goals{grid-template-columns:1fr}}
+
+/* KPI popup: independent sections, scoped to preserve the rest of Spend Flow. */
+.growth-kpis,.growth-kpis *{min-width:0;box-sizing:border-box}
+.growth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#eee8f6;padding:4px;border-radius:12px;margin-bottom:12px}
+.growth-tabs button{border:0;border-radius:9px;background:transparent;color:#756783;padding:10px;font:inherit;font-weight:700}
+.growth-tabs button[aria-selected=true]{background:white;color:#7655a7;box-shadow:0 1px 4px #67508018}
+.growth-section{border-bottom:1px solid #e8e0f0;margin-bottom:8px}
+.growth-section h3{margin:0}
+.growth-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;border:0;background:transparent;padding:12px 0;color:#53416e;font:inherit;font-weight:700;text-align:left}
+.growth-heading svg{flex-shrink:0}
+.growth-section-body{padding-bottom:12px}
+.growth-kpis [hidden]{display:none!important}
+.growth-kpis button:focus-visible,.growth-kpis input:focus-visible{outline:2px solid #8167bb;outline-offset:2px}
+.growth-list{display:grid;gap:8px}
+.growth-entry{display:grid;gap:7px;padding:12px;margin:0;overflow-wrap:anywhere}
+.growth-entry span{font-size:13px;color:#756783}
+.growth-actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.growth-actions button,.growth-add{font-size:13px;padding:9px 12px;min-height:40px}
+.growth-add{margin-top:8px}
+.growth-editor{display:grid;gap:9px;margin-top:8px;padding:12px;background:#f5f1fa;border-radius:12px}
+.growth-editor label{display:grid;gap:5px;font-size:12px;color:#62516e}
+.growth-editor input{width:100%;max-width:100%;border:1px solid #e2d9f0;border-radius:9px;padding:9px;background:white;color:#53416e;font-size:16px}
+.growth-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.growth-editor [role=alert]{margin:0;font-size:12px;color:#963c60}
+.growth-kpis .spend-kpi-secondary .spread{flex-wrap:wrap;gap:4px;overflow-wrap:anywhere}
+.growth-kpis .spend-kpi-card{margin:0;overflow-wrap:anywhere}
