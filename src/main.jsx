@@ -180,3 +180,5 @@ function Authentication(){
 }
 createRoot(document.getElementById('root')).render(<Authentication/>);
 
+
+import './mobile-readability.css';

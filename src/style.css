@@ -188,3 +188,262 @@ a,a:visited{color:var(--sf-purple-deep)}
 .growth-editor [role=alert]{margin:0;font-size:12px;color:#963c60}
 .growth-kpis .spend-kpi-secondary .spread{flex-wrap:wrap;gap:4px;overflow-wrap:anywhere}
 .growth-kpis .spend-kpi-card{margin:0;overflow-wrap:anywhere}
+
+
+/* Readable phone typography; retain desktop sizes and existing layout. */
+@media (max-width: 749px) {
+    h3 {
+        font-size: 16px !important
+    }
+    .topline p {
+        font-size: 15px !important
+    }
+    .eyebrow {
+        font-size: 15px !important
+    }
+    .caption {
+        font-size: 14px !important
+    }
+    .stat small {
+        font-size: 14px !important
+    }
+    .stat span {
+        font-size: 13px !important
+    }
+    .section-heading small {
+        font-size: 14px !important
+    }
+    .budget-trigger b {
+        font-size: 16px !important
+    }
+    .budget-trigger span {
+        font-size: 15px !important
+    }
+    .field {
+        font-size: 15px !important
+    }
+    .small {
+        font-size: 15px !important
+    }
+    .bottomnav button small {
+        font-size: 13px !important
+    }
+    .primary,.secondary,.ghost,.danger {
+        font-size: 16px !important
+    }
+    .mini {
+        font-size: 14px !important
+    }
+    .tx-date {
+        font-size: 14px !important
+    }
+    .tx-main b {
+        font-size: 16px !important
+    }
+    .tx-main small {
+        font-size: 13px !important
+    }
+    .tx strong {
+        font-size: 15px !important
+    }
+    .calendar-head span {
+        font-size: 14px !important
+    }
+    .cal-day b {
+        font-size: 15px !important
+    }
+    .cal-day small {
+        font-size: 13px !important
+    }
+    .legend {
+        font-size: 13px !important
+    }
+    .smallrow {
+        font-size: 15px !important
+    }
+    .pill {
+        font-size: 14px !important
+    }
+    .catline span {
+        font-size: 15px !important
+    }
+    .catline strong {
+        font-size: 15px !important
+    }
+    .back {
+        font-size: 15px !important
+    }
+    .seg button {
+        font-size: 15px !important
+    }
+    .detailclick b {
+        font-size: 15px !important
+    }
+    .detailclick .push {
+        font-size: 15px !important
+    }
+    .goalmark {
+        font-size: 16px !important
+    }
+    .goal {
+        font-size: 15px !important
+    }
+    .viewlist button {
+        font-size: 14px !important
+    }
+    .note p {
+        font-size: 15px !important
+    }
+    .actions button {
+        font-size: 14px !important
+    }
+    .empty {
+        font-size: 15px !important
+    }
+    .reference-btn {
+        font-size: 14px !important
+    }
+    .chips span {
+        font-size: 14px !important
+    }
+    .uploadline label {
+        font-size: 15px !important
+    }
+    .uploadline input {
+        font-size: 13px !important
+    }
+    .receipt-preview small {
+        font-size: 13px !important
+    }
+    .itemrow input,.itemrow select {
+        font-size: 13px !important
+    }
+    .toast {
+        font-size: 15px !important
+    }
+    @media (max-width:380px) {
+        .catline strong {
+            font-size: 13px !important
+        }
+    }
+    .auth-panel>p {
+        font-size: 16px !important
+    }
+    .auth-message {
+        font-size: 16px !important
+    }
+    .sync-status {
+        font-size: 14px !important
+    }
+    .copy-budget {
+        font-size: 15px !important
+    }
+    @media (max-width:360px) {
+        .copy-budget {
+            font-size: 14px !important
+        }
+    }
+    .cal-day small {
+        font-size: 13px !important
+    }
+    .budget-heading-actions small {
+        font-size: 14px !important
+    }
+    .category-daily-budget {
+        font-size: 15px !important
+    }
+    .category-daily-budget strong {
+        font-size: 16px !important
+    }
+    @media (max-width:370px) {
+        .category-daily-budget {
+            font-size: 14px !important
+        }
+    }
+    .plan-stat span {
+        font-size: 14px !important
+    }
+    .plan-filters button {
+        font-size: 15px !important
+    }
+    .plan-open b {
+        font-size: 16px !important
+    }
+    .plan-open strong {
+        font-size: 15px !important
+    }
+    .plan-open small {
+        font-size: 14px !important
+    }
+    .plan-preview {
+        font-size: 15px !important
+    }
+    @media (max-width:375px) {
+        .bottomnav button small {
+            font-size: 13px !important
+        }
+    }
+    .plan-inner-tabs button {
+        font-size: 16px !important
+    }
+    .calc-history>.spread {
+        font-size: 15px !important
+    }
+    .calc-history-row {
+        font-size: 16px !important
+    }
+    .calc-summary .spread {
+        font-size: 16px !important
+    }
+    .calc-history-tabs button {
+        font-size: 15px !important
+    }
+    .calc-history-tabs button small {
+        font-size: 13px !important
+    }
+    .calc-history-total {
+        font-size: 15px !important
+    }
+    .fixed-filter-tag {
+        font-size: 16px !important
+    }
+    .spend-kpi-goals label {
+        font-size: 15px !important
+    }
+    .spend-kpi-card small {
+        font-size: 15px !important
+    }
+    .spend-kpi-card span {
+        font-size: 14px !important
+    }
+    .consumption-row b {
+        font-size: 16px !important
+    }
+    .consumption-row small {
+        font-size: 14px !important
+    }
+    .consumption-actions select {
+        font-size: 15px !important
+    }
+    .plan-purchase,.plan-cancel {
+        font-size: 14px !important
+    }
+    .plan-linked {
+        font-size: 14px !important
+    }
+    .growth-entry span {
+        font-size: 16px !important
+    }
+    .growth-actions button,.growth-add {
+        font-size: 16px !important
+    }
+    .growth-editor label {
+        font-size: 15px !important
+    }
+    .growth-editor [role=alert] {
+        font-size: 15px !important
+    }
+}
+
+@media(max-width:749px){.stat strong{font-size:max(15px,clamp(14px,3.7vw,20px))!important}
+.plan-stat strong{font-size:max(15px,clamp(14px,4vw,20px))!important}}
