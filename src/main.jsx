@@ -135,6 +135,7 @@ function Authentication(){
   const saving=React.useRef(Promise.resolve());
   const timer=React.useRef(null);
   const mounted=React.useRef(true);
+   const serverBaseline=React.useRef(null),saveBlocked=React.useRef(false),accountId=React.useRef(null);
   useEffect(()=>{
     if(!configReady){setLoading(false);return}
     let alive=true;
@@ -143,24 +144,35 @@ function Authentication(){
     return ()=>{alive=false;subscription.unsubscribe()};
   },[]);
   useEffect(()=>{
-    if(!session?.user?.id){setRemote(null);return}
+    if(!session?.user?.id){setRemote(null);accountId.current=null;serverBaseline.current=null;saveBlocked.current=false;return}
     let alive=true;
-    setRemote(null);
+    setRemote(null);accountId.current=session.user.id;serverBaseline.current=null;saveBlocked.current=false;
     supabase.from('spend_flow_data').select('payload').eq('user_id',session.user.id).maybeSingle()
-      .then(({data,error})=>{if(!alive)return;if(error){setMessage('데이터 불러오기 실패: '+error.message);setRemote(null);return}setRemote(data?.payload&&typeof data.payload==='object'?normalizeInsuranceData(data.payload):{...START})});
+      .then(({data,error})=>{if(!alive)return;if(error){setMessage('데이터 불러오기 실패: '+error.message);setRemote(null);return}serverBaseline.current=data?.payload??null;setRemote(data?.payload&&typeof data.payload==='object'?normalizeInsuranceData(data.payload):{...START})});
     return ()=>{alive=false};
   },[session?.user?.id]);
   const persist=React.useCallback((payload)=>{
-    if(!session?.user?.id)return;
+    if(!session?.user?.id||saveBlocked.current)return;
     if(timer.current)clearTimeout(timer.current);
     setStatus('저장 중…');
     const userId=session.user.id;
     timer.current=setTimeout(()=>{
       const snapshot=JSON.parse(JSON.stringify(payload));
       saving.current=saving.current.catch(()=>{}).then(async()=>{
+        if(accountId.current!==userId||saveBlocked.current)return;
+        const {data:row,error:readError}=await supabase.from('spend_flow_data').select('payload').eq('user_id',userId).maybeSingle();
+        if(readError)throw readError;
+        if(accountId.current!==userId||saveBlocked.current)return;
+        if(JSON.stringify(row?.payload??null)!==JSON.stringify(serverBaseline.current)){
+         saveBlocked.current=true;
+         try{localStorage.setItem('spend-flow-conflict-backup-'+userId,JSON.stringify(snapshot))}catch{}
+         setStatus('다른 기기 수정 감지 · 저장 중단');
+         setMessage('다른 기기에서 소비 기록이 수정되어 덮어쓰지 않았어. 현재 기기 사본을 보관했어.');
+         return;
+        }
         const {error}=await supabase.from('spend_flow_data').upsert({user_id:userId,payload:snapshot,updated_at:new Date().toISOString()},{onConflict:'user_id'});
         if(error)throw error;
-        setStatus('저장됨 ✓');
+        serverBaseline.current=snapshot;setStatus('저장됨 ✓');
       }).catch(e=>{setStatus('저장 오류');setMessage('동기화 실패: '+e.message)});
     },500);
   },[session?.user?.id]);
