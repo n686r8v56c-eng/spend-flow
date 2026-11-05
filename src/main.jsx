@@ -3,6 +3,7 @@ import React,{useState,useEffect,useMemo} from 'react';import{createRoot}from're
 import {Wallet,Target,CalendarDays,Plus,ChartNoAxesCombined,Repeat,BookOpen,X,ChevronDown,ChevronUp,ChevronLeft,ChevronRight,Camera,Trash2,Edit3,Save,Check,Search,SlidersHorizontal,TrendingUp,TrendingDown,Notebook,CalendarClock,Receipt,Download,Upload,Info,HeartHandshake,Settings2,ClipboardList,Gift, Circle,CheckCircle2,ExternalLink} from 'lucide-react';
 import {ResponsiveContainer,BarChart,Bar,XAxis,YAxis,Tooltip,CartesianGrid,PieChart,Pie,Cell} from 'recharts';
 import {categories,names,parseMemo,won,today,ym,uid} from './catalog';import {supabase,configReady} from './supabase';import './style.css';
+const sameSnapshot=(a,b)=>{const order=x=>Array.isArray(x)?x.map(order):x&&typeof x==='object'?Object.fromEntries(Object.keys(x).sort().map(k=>[k,order(x[k])])):x;return JSON.stringify(order(a))===JSON.stringify(order(b))};
 const START={expenses:[],fixed:[],tax:[],budgets:{},monthlyBudget:1000000,monthlyBudgets:{},categoryBudgetsByMonth:{},goals:{},savedViews:[],plans:[],budgetCalculations:{},kpiTargets:{noSpendDays:12,reserve:0},kpiSettings:{}};
 function normalizeInsuranceData(input){if(!input||typeof input!=='object')return input;const fixExpense=e=>e.category==='구독'&&(e.subcategory==='보험료'||(e.items||[]).some(i=>i.type==='보험료'))?{...e,category:'보험비',subcategory:'',items:(e.items||[]).map(i=>i.type==='보험료'?{...i,type:''}:i)}:e;return {...input,expenses:Array.isArray(input.expenses)?input.expenses.map(fixExpense):[],fixed:Array.isArray(input.fixed)?input.fixed.map(f=>f.category==='보험료'?{...f,category:'보험비'}:f):[],goals:input.goals||{}};}
 function Icon({type,...p}){const map={up:TrendingUp,down:TrendingDown,only:Notebook};const Comp=map[type]||Info;return <Comp {...p}/>}
@@ -163,7 +164,7 @@ function Authentication(){
         const {data:row,error:readError}=await supabase.from('spend_flow_data').select('payload').eq('user_id',userId).maybeSingle();
         if(readError)throw readError;
         if(accountId.current!==userId||saveBlocked.current)return;
-        if(JSON.stringify(row?.payload??null)!==JSON.stringify(serverBaseline.current)){
+        if(!sameSnapshot(row?.payload??null,serverBaseline.current)){
          saveBlocked.current=true;
          try{localStorage.setItem('spend-flow-conflict-backup-'+userId,JSON.stringify(snapshot))}catch{}
          setStatus('다른 기기 수정 감지 · 저장 중단');
