@@ -509,3 +509,27 @@ a,a:visited{color:var(--sf-purple-deep)}
 .satisfaction-row>svg{color:#958ba3;flex:none}
 .satisfaction-inbox-link{margin-top:12px}
 .satisfaction-empty{padding:12px 0}
+
+/* Spending spike and no-spend streak insights */
+.spending-insights>h2{margin-bottom:13px}
+.spending-insights-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:5px;border-radius:13px;background:#efeaf7;margin:10px 0 17px}
+.spending-insights-tabs button{border:0;border-radius:10px;background:transparent;color:#81718d;min-height:43px;font-size:14px;font-weight:700}
+.spending-insights-tabs button.selected{background:#fff;color:#7d5cb4;box-shadow:0 1px 7px #6d548220}
+.spending-spike-panel>.spread,.no-spend-panel>.spread{align-items:baseline}
+.spending-spike-panel>.spread h3,.no-spend-panel>.spread h3{margin:0}
+.spending-spike-panel>.spread small,.no-spend-panel>.spread small{color:#938a9b}
+.spending-spike-day{border-top:1px solid #eee6f1;padding:14px 0}
+.spending-spike-day:first-of-type{margin-top:12px}
+.spending-spike-heading{gap:10px;align-items:center}
+.spending-spike-heading b{font-size:14px}
+.spending-spike-heading strong{font-size:17px;color:#795cb2}
+.spending-spike-day>.muted{margin:4px 0}
+.spending-spike-day .tx{padding:9px 0}
+.spending-insights-empty{padding:15px 0}
+.no-spend-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:15px 0}
+.no-spend-stats>div{padding:12px 7px;border:1px solid #ebe3f2;border-radius:12px;background:#faf8fd;display:flex;flex-direction:column;gap:7px;align-items:center}
+.no-spend-stats small{font-size:12px;color:#938a9b}
+.no-spend-stats strong{font-size:20px;color:#7759b1}
+.no-spend-runs{padding:13px;border-radius:12px;background:#f5f0fa;margin-bottom:12px}
+.no-spend-runs>b{font-size:14px}
+.no-spend-runs p{font-size:14px;margin-top:6px;color:#755fa1}
