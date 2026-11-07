@@ -188,7 +188,7 @@ const chartData=(()=>{
    <div className="spread spending-spike-heading"><b>{d.date}</b><strong>{won(d.amount)}</strong></div>
    <p className="muted small">평균의 {(d.amount/avgSpendingDay).toFixed(1)}배 · {d.rows.length}건</p>
    {expenseRows(d.rows)}
-   {editingSpikeLogDate===d.date||!store.spikeLogs?.[d.date]?.note?<SpikeLogEditor key={d.date} date={d.date} initialNote={store.spikeLogs?.[d.date]?.note||''} onSave={note=>saveSpikeLog(d.date,note,d.amount,d.rows.length)} onCancel={store.spikeLogs?.[d.date]?.note?()=>setEditingSpikeLogDate(null):null}/>:<div className="spike-saved-note"><span>그날의 기록</span><p>{store.spikeLogs[d.date].note}</p></div>}
+   {!store.spikeLogs?.[d.date]?.note?<SpikeLogEditor key={d.date} date={d.date} initialNote={store.spikeLogs?.[d.date]?.note||''} onSave={note=>saveSpikeLog(d.date,note,d.amount,d.rows.length)} onCancel={store.spikeLogs?.[d.date]?.note?()=>setEditingSpikeLogDate(null):null}/>:<div className="spike-saved-note"><span>그날의 기록</span><p>{store.spikeLogs[d.date].note}</p></div>}
   </div>):<p className="muted small spending-insights-empty">{dailySpends.length<2?'비교할 지출 날짜가 2일 이상 쌓이면 급증한 날을 찾아줄게.':'선택한 기간에 평균의 1.5배 이상 지출한 날이 없어.'}</p>}
  <div className="spike-log-archive">
   <div className="spread"><h3>미친 소비 로그</h3><small>전체 {savedSpikeLogs.length}개</small></div>
