@@ -555,3 +555,11 @@ a,a:visited{color:var(--sf-purple-deep)}
 .spike-saved-note{margin-top:12px;background:#f6f1fb;padding:11px 12px;border-radius:12px}
 .spike-saved-note span{font-size:12px;font-weight:700;color:#8269b0}
 .spike-saved-note p{margin-bottom:0}
+
+/* Monthly no-spend praise diary */
+.no-spend-praise{display:flex;flex-direction:column;gap:10px;margin-top:16px;padding:14px;background:#faf7ff;border:1px solid #e9dff4;border-radius:14px}
+.no-spend-praise>label{font-size:16px;font-weight:800;color:#7e61b5}
+.no-spend-praise textarea{width:100%;min-height:86px;padding:12px;border:1px solid #e6def1;border-radius:10px;background:#fff;color:#34313d;font-size:16px;line-height:1.5;resize:vertical}
+.no-spend-praise-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.no-spend-praise-actions .primary{flex:1}
+.no-spend-praise-actions small{font-size:12px;color:#8c7f9c;white-space:nowrap}
