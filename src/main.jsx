@@ -149,7 +149,7 @@ const savedSpikeLogs=Object.entries(store.spikeLogs||{}).filter(([date,log])=>da
 const saveSpikeLog=(date,note,amount,count)=>{update('spikeLogs',logs=>({...logs,[date]:{...(logs?.[date]||{}),note,amount,count,updatedAt:new Date().toISOString()}}));setEditingSpikeLogDate(null);notify('미친 소비 로그를 저장했어 ㅋㅋ');};
 const removeSpikeLog=date=>{if(!window.confirm('이날의 미친 소비 로그를 삭제할까? 지출 기록은 유지돼.'))return;update('spikeLogs',logs=>{const copy={...(logs||{})};delete copy[date];return copy;});setEditingSpikeLogDate(null);};
 const currentMonth=today().slice(0,7);
-const savedPraiseLogs=Object.entries(store.noSpendPraises||{}).filter(([m,note])=>/^\\d{4}-\\d{2}$/.test(m)&&typeof note==='string'&&note.trim()).sort(([a],[b])=>b.localeCompare(a));
+const savedPraiseLogs=Object.entries(store.noSpendPraises||{}).filter(([m,note])=>/^\d{4}-\d{2}$/.test(m)&&typeof note==='string'&&note.trim()).sort(([a],[b])=>b.localeCompare(a));
 const savePraiseLog=(m,note)=>{update('noSpendPraises',old=>({...old,[m]:note}));setEditingPraiseLogMonth(null);notify('무지출 칭찬을 저장했어! 💜');};
 const deletePraiseLog=m=>{if(!window.confirm(m+' 무지출 칭찬 로그를 삭제할까?'))return;update('noSpendPraises',old=>{const next={...(old||{})};delete next[m];return next;});setEditingPraiseLogMonth(null);};
 const currentMonthLastDay=Number(today().slice(8));
@@ -231,7 +231,7 @@ const chartData=(()=>{
     <div><small>총 무지출</small><strong>{currentMonthLastDay-monthExpenseDays.size}일</strong></div>
   </div>
   {bestNoSpendRuns.length?<div className="no-spend-runs"><b>최장 기록 날짜</b>{bestNoSpendRuns.map(run=><p key={run.start}>{formatRunDate(run.start)} ~ {formatRunDate(run.end)} · {run.length}일</p>)}</div>:<p className="muted small spending-insights-empty">이번 달에는 아직 무지출 날짜가 없어.</p>}
-  <NoSpendPraiseEditor key={currentMonth} month={currentMonth} initialNote={store.noSpendPraises?.[currentMonth]||''} onSave={note=>savePraiseLog(currentMonth,note)}/>
+  <NoSpendPraiseEditor key={currentMonth+'-'+(store.noSpendPraises?.[currentMonth]||'')} month={currentMonth} initialNote={store.noSpendPraises?.[currentMonth]||''} onSave={note=>savePraiseLog(currentMonth,note)}/>
   <div className="no-spend-praise-archive">
    <div className="spread"><h3>무지출 칭찬 로그</h3><small>전체 {savedPraiseLogs.length}개</small></div>
    {savedPraiseLogs.length?savedPraiseLogs.map(([m,note])=><div className="no-spend-praise-log-entry" key={m}>
