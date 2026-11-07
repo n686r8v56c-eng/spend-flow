@@ -533,3 +533,25 @@ a,a:visited{color:var(--sf-purple-deep)}
 .no-spend-runs{padding:13px;border-radius:12px;background:#f5f0fa;margin-bottom:12px}
 .no-spend-runs>b{font-size:14px}
 .no-spend-runs p{font-size:14px;margin-top:6px;color:#755fa1}
+
+/* Persistent "미친 소비 로그" diary */
+.spike-log-editor{display:flex;flex-direction:column;gap:9px;background:#faf8fd;border:1px solid #eee6f4;border-radius:13px;padding:12px;margin-top:12px}
+.spike-log-editor label{font-size:14px;font-weight:700;color:#75648d}
+.spike-log-editor textarea{width:100%;resize:vertical;min-height:80px;border:1px solid #e6dbf0;border-radius:10px;padding:11px 12px;color:#34313d;background:#fff;font-size:16px;line-height:1.5}
+.spike-log-actions{display:flex;gap:7px;justify-content:flex-end}
+.spike-log-actions .primary{flex:1}
+.spike-log-actions .secondary{flex:0 0 auto}
+.spike-log-archive{border-top:1px solid #e9e1ef;margin-top:18px;padding-top:17px}
+.spike-log-archive>.spread h3{margin:0}
+.spike-log-archive>.spread small{font-size:12px;color:#958aa0}
+.spike-log-entry{border-bottom:1px solid #eee8f3;padding:14px 0}
+.spike-log-entry:last-child{border-bottom:0}
+.spike-log-entry>.spread{align-items:baseline;gap:10px}
+.spike-log-entry>.spread strong{font-size:14px}
+.spike-log-entry>.spread b{font-size:14px;color:#8065af}
+.spike-log-entry>p,.spike-saved-note p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.6;margin:9px 0}
+.spike-log-entry-actions{display:flex;gap:9px}
+.spike-log-entry-actions button{display:flex;align-items:center;gap:5px;background:transparent;border:0;padding:6px 3px;color:#8a7b9b;font-size:12px}
+.spike-saved-note{margin-top:12px;background:#f6f1fb;padding:11px 12px;border-radius:12px}
+.spike-saved-note span{font-size:12px;font-weight:700;color:#8269b0}
+.spike-saved-note p{margin-bottom:0}
