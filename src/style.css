@@ -447,3 +447,6 @@ a,a:visited{color:var(--sf-purple-deep)}
 
 @media(max-width:749px){.stat strong{font-size:max(15px,clamp(14px,3.7vw,20px))!important}
 .plan-stat strong{font-size:max(15px,clamp(14px,4vw,20px))!important}}
+
+/* Analysis summary drill-down */
+.analysis-summary-action{width:100%;text-align:left;color:inherit;cursor:pointer;font:inherit;align-items:flex-start}.analysis-summary-action:focus-visible{outline:2px solid #9074c6;outline-offset:2px}.analysis-summary-action[aria-expanded="true"]{border-color:#b9a3e3;background:#faf8ff}.analysis-expense-list{margin-top:10px}.analysis-expense-list .txs{max-height:55vh;overflow-y:auto}.analysis-expense-list h3{margin:0}
