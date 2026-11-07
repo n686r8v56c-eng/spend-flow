@@ -22,11 +22,15 @@ function SpikeLogEditor({date,initialNote='',onSave,onCancel}){
 }
 function NoSpendPraiseEditor({month,initialNote='',onSave}){
  const [note,setNote]=useState(initialNote);
- const [lastSaved,setLastSaved]=useState(initialNote);
+ const [editing,setEditing]=useState(!initialNote.trim());
+ const saved=initialNote.trim();
+ const save=()=>{const cleaned=note.trim();if(!cleaned)return;onSave(cleaned);setNote(cleaned);setEditing(false);};
  return <div className="no-spend-praise">
- <label htmlFor={'no-spend-praise-'+month}>💜 무지출 칭찬해!</label>
- <textarea id={'no-spend-praise-'+month} rows={3} value={note} onChange={e=>setNote(e.target.value)} placeholder="오늘도 잘 참았다! 나에게 해주고 싶은 칭찬을 적어봐 ㅋㅋ"/>
- <div className="no-spend-praise-actions"><button type="button" className="primary" disabled={!note.trim()||note===lastSaved} onClick={()=>{onSave(note.trim());setNote(note.trim());setLastSaved(note.trim())}}><Save size={15}/> 칭찬 저장</button>{note===lastSaved&&note.trim()&&<small>저장된 칭찬 ✓</small>}</div>
+  <div className="no-spend-praise-heading"><strong>💜 무지출 칭찬해!</strong>{!editing&&saved&&<button type="button" className="secondary" onClick={()=>setEditing(true)}><Edit3 size={14}/> 수정</button>}</div>
+  {editing?<><label className="sr-only" htmlFor={'no-spend-praise-'+month}>이번 달 무지출 칭찬</label>
+  <textarea id={'no-spend-praise-'+month} rows={3} value={note} onChange={e=>setNote(e.target.value)} placeholder="오늘도 잘 참았다! 나에게 해주고 싶은 칭찬을 적어봐 ㅋㅋ"/>
+  <div className="no-spend-praise-actions"><button type="button" className="primary" disabled={!note.trim()||note.trim()===saved} onClick={save}><Save size={15}/> 칭찬 저장</button>{saved&&<button type="button" className="secondary" onClick={()=>{setNote(initialNote);setEditing(false)}}>취소</button>}</div>
+  </>:<p className="no-spend-praise-saved">{saved}</p>}
  </div>
 }
 const START={noSpendPraises:{},spikeLogs:{},expenses:[],fixed:[],tax:[],budgets:{},monthlyBudget:1000000,monthlyBudgets:{},categoryBudgetsByMonth:{},goals:{},savedViews:[],plans:[],budgetCalculations:{},kpiTargets:{noSpendDays:12,reserve:0},kpiSettings:{}};
