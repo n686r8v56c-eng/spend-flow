@@ -16,10 +16,14 @@ function ReviewRatingPicker({value,onChange,showReset=false}){
  {showReset&&value&&<button type="button" className="review-reset" onClick={()=>onChange(null)}>평가 취소</button>}
  </div>
 }
-const START={expenses:[],fixed:[],tax:[],budgets:{},monthlyBudget:1000000,monthlyBudgets:{},categoryBudgetsByMonth:{},goals:{},savedViews:[],plans:[],budgetCalculations:{},kpiTargets:{noSpendDays:12,reserve:0},kpiSettings:{}};
+function SpikeLogEditor({date,initialNote='',onSave,onCancel}){
+ const [note,setNote]=useState(initialNote);
+ return <div className="spike-log-editor"><label htmlFor={'spike-log-'+date}>그날 무슨 일이 있었어?</label><textarea id={'spike-log-'+date} rows={3} value={note} onChange={e=>setNote(e.target.value)} placeholder="왜 이렇게 돈을 썼는지, 그날의 일이나 기분을 적어봐 ㅋㅋ"/><div className="spike-log-actions"><button type="button" className="primary" disabled={!note.trim()} onClick={()=>onSave(note.trim())}><Save size={15}/> 로그 저장</button>{onCancel&&<button type="button" className="secondary" onClick={onCancel}>취소</button>}</div></div>
+}
+const START={spikeLogs:{},expenses:[],fixed:[],tax:[],budgets:{},monthlyBudget:1000000,monthlyBudgets:{},categoryBudgetsByMonth:{},goals:{},savedViews:[],plans:[],budgetCalculations:{},kpiTargets:{noSpendDays:12,reserve:0},kpiSettings:{}};
 function normalizeInsuranceData(input){if(!input||typeof input!=='object')return input;const fixExpense=e=>e.category==='구독'&&(e.subcategory==='보험료'||(e.items||[]).some(i=>i.type==='보험료'))?{...e,category:'보험비',subcategory:'',items:(e.items||[]).map(i=>i.type==='보험료'?{...i,type:''}:i)}:e;return {...input,expenses:Array.isArray(input.expenses)?input.expenses.map(fixExpense):[],fixed:Array.isArray(input.fixed)?input.fixed.map(f=>f.category==='보험료'?{...f,category:'보험비'}:f):[],goals:input.goals||{}};}
 function Icon({type,...p}){const map={up:TrendingUp,down:TrendingDown,only:Notebook};const Comp=map[type]||Info;return <Comp {...p}/>}
-function App({initialStore,onPersist,onLogout,accountEmail}){const [store,setStore]=useState(()=>({...START,...initialStore}));const [tab,setTab]=useState('예산');const [planEditor,setPlanEditor]=useState(null);const [expenseTypeFilter,setExpenseTypeFilter]=useState('planned');const [classificationPeriod,setClassificationPeriod]=useState('period');const [planFilter,setPlanFilter]=useState('전체');const [planInnerTab,setPlanInnerTab]=useState('list');const [calcOpen,setCalcOpen]=useState(null);const [calcHistoryOffset,setCalcHistoryOffset]=useState(1);const [calcTotalOpen,setCalcTotalOpen]=useState(false);const [month,setMonth]=useState(ym(today()));const [editor,setEditor]=useState(null);const [notice,setNotice]=useState('');const [refOpen,setRefOpen]=useState(false);const [refCat,setRefCat]=useState('식료품');const [subTab,setSubTab]=useState('fixed');const [fixedFilter,setFixedFilter]=useState('전체');const [selectedDate,setSelectedDate]=useState(today());const [expandedBudget,setExpandedBudget]=useState(null);const [budgetSort,setBudgetSort]=useState(null);const [period,setPeriod]=useState('month');const [metric,setMetric]=useState('amount');const [analysisCat,setAnalysisCat]=useState(null);const [analysisType,setAnalysisType]=useState('category');const [analysisDetail,setAnalysisDetail]=useState(null);const [reviewFolder,setReviewFolder]=useState('inbox');const [analysisExpensesOpen,setAnalysisExpensesOpen]=useState(false);const [spendInsightTab,setSpendInsightTab]=useState('spike');const [fixedEditor,setFixedEditor]=useState(null);const [taxEditor,setTaxEditor]=useState(null);const [showSettings,setShowSettings]=useState(false);const [showKPI,setShowKPI]=useState(false);
+function App({initialStore,onPersist,onLogout,accountEmail}){const [store,setStore]=useState(()=>({...START,...initialStore}));const [tab,setTab]=useState('예산');const [planEditor,setPlanEditor]=useState(null);const [expenseTypeFilter,setExpenseTypeFilter]=useState('planned');const [classificationPeriod,setClassificationPeriod]=useState('period');const [planFilter,setPlanFilter]=useState('전체');const [planInnerTab,setPlanInnerTab]=useState('list');const [calcOpen,setCalcOpen]=useState(null);const [calcHistoryOffset,setCalcHistoryOffset]=useState(1);const [calcTotalOpen,setCalcTotalOpen]=useState(false);const [month,setMonth]=useState(ym(today()));const [editor,setEditor]=useState(null);const [notice,setNotice]=useState('');const [refOpen,setRefOpen]=useState(false);const [refCat,setRefCat]=useState('식료품');const [subTab,setSubTab]=useState('fixed');const [fixedFilter,setFixedFilter]=useState('전체');const [selectedDate,setSelectedDate]=useState(today());const [expandedBudget,setExpandedBudget]=useState(null);const [budgetSort,setBudgetSort]=useState(null);const [period,setPeriod]=useState('month');const [metric,setMetric]=useState('amount');const [analysisCat,setAnalysisCat]=useState(null);const [analysisType,setAnalysisType]=useState('category');const [analysisDetail,setAnalysisDetail]=useState(null);const [reviewFolder,setReviewFolder]=useState('inbox');const [analysisExpensesOpen,setAnalysisExpensesOpen]=useState(false);const [spendInsightTab,setSpendInsightTab]=useState('spike');const [editingSpikeLogDate,setEditingSpikeLogDate]=useState(null);const [fixedEditor,setFixedEditor]=useState(null);const [taxEditor,setTaxEditor]=useState(null);const [showSettings,setShowSettings]=useState(false);const [showKPI,setShowKPI]=useState(false);
 const initialRender=React.useRef(true);
 useEffect(()=>{if(initialRender.current){initialRender.current=false;return}onPersist(store)},[store,onPersist]);
 const update=(key,value)=>setStore(s=>({...s,[key]:typeof value==='function'?value(s[key]):value}));
@@ -121,6 +125,9 @@ const dailySpends=[...spendingDates.values()].sort((a,b)=>b.amount-a.amount);
 const avgSpendingDay=dailySpends.length?dailySpends.reduce((total,d)=>total+d.amount,0)/dailySpends.length:0;
 // A spike means at least 150% of the average day with spending, requiring two such days for comparison.
 const spikeDays=dailySpends.length<2?[]:dailySpends.filter(d=>d.amount>=avgSpendingDay*1.5).slice(0,5);
+const savedSpikeLogs=Object.entries(store.spikeLogs||{}).filter(([date,log])=>date&&log?.note?.trim()).sort(([a],[b])=>b.localeCompare(a));
+const saveSpikeLog=(date,note,amount,count)=>{update('spikeLogs',logs=>({...logs,[date]:{...(logs?.[date]||{}),note,amount,count,updatedAt:new Date().toISOString()}}));setEditingSpikeLogDate(null);notify('미친 소비 로그를 저장했어 ㅋㅋ');};
+const removeSpikeLog=date=>{if(!window.confirm('이날의 미친 소비 로그를 삭제할까? 지출 기록은 유지돼.'))return;update('spikeLogs',logs=>{const copy={...(logs||{})};delete copy[date];return copy;});setEditingSpikeLogDate(null);};
 const currentMonth=today().slice(0,7);
 const currentMonthLastDay=Number(today().slice(8));
 const monthExpenseDays=new Set(store.expenses.filter(e=>e.date?.slice(0,7)===currentMonth&&Number(e.amount)>0&&e.date<=today()).map(e=>e.date));
@@ -181,7 +188,18 @@ const chartData=(()=>{
    <div className="spread spending-spike-heading"><b>{d.date}</b><strong>{won(d.amount)}</strong></div>
    <p className="muted small">평균의 {(d.amount/avgSpendingDay).toFixed(1)}배 · {d.rows.length}건</p>
    {expenseRows(d.rows)}
+   {editingSpikeLogDate===d.date||!store.spikeLogs?.[d.date]?.note?<SpikeLogEditor key={d.date} date={d.date} initialNote={store.spikeLogs?.[d.date]?.note||''} onSave={note=>saveSpikeLog(d.date,note,d.amount,d.rows.length)} onCancel={store.spikeLogs?.[d.date]?.note?()=>setEditingSpikeLogDate(null):null}/>:<div className="spike-saved-note"><span>그날의 기록</span><p>{store.spikeLogs[d.date].note}</p></div>}
   </div>):<p className="muted small spending-insights-empty">{dailySpends.length<2?'비교할 지출 날짜가 2일 이상 쌓이면 급증한 날을 찾아줄게.':'선택한 기간에 평균의 1.5배 이상 지출한 날이 없어.'}</p>}
+ <div className="spike-log-archive">
+  <div className="spread"><h3>미친 소비 로그</h3><small>전체 {savedSpikeLogs.length}개</small></div>
+  {savedSpikeLogs.length?savedSpikeLogs.map(([date,log])=><div className="spike-log-entry" key={date}>
+   <div className="spread"><strong>{date}</strong><b>{won(Number(log.amount)||0)}</b></div>
+   {editingSpikeLogDate===date?<SpikeLogEditor key={'archive-'+date} date={date} initialNote={log.note} onSave={note=>saveSpikeLog(date,note,Number(log.amount)||0,Number(log.count)||0)} onCancel={()=>setEditingSpikeLogDate(null)}/>:<>
+    <p>{log.note}</p>
+    <div className="spike-log-entry-actions"><button type="button" onClick={()=>setEditingSpikeLogDate(date)}><Edit3 size={14}/> 수정</button><button type="button" onClick={()=>removeSpikeLog(date)}><Trash2 size={14}/> 삭제</button></div>
+   </>}
+  </div>):<p className="muted small">미친 소비날에 글을 남기면 여기 계속 모여. 나중에 돌아보면 재밌겠다! ㅋㅋ</p>}
+ </div>
  </div>:<div className="no-spend-panel">
   <div className="spread"><h3>이번 달 연속 무지출</h3><small>{currentMonth.replace('-','년 ')}월</small></div>
   <div className="no-spend-stats">
