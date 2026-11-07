@@ -563,3 +563,10 @@ a,a:visited{color:var(--sf-purple-deep)}
 .no-spend-praise-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .no-spend-praise-actions .primary{flex:1}
 .no-spend-praise-actions small{font-size:12px;color:#8c7f9c;white-space:nowrap}
+
+/* Saved no-spend praise: read-only note with compact edit button */
+.no-spend-praise-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.no-spend-praise-heading>strong{font-size:16px;color:#7e61b5}
+.no-spend-praise-heading>.secondary{min-height:34px;padding:7px 10px;font-size:12px;flex:none}
+.no-spend-praise-saved{white-space:pre-wrap;overflow-wrap:anywhere;background:#fff;border:1px solid #e9e0f1;border-radius:10px;padding:12px 13px;margin:0;font-size:15px;color:#38323e;line-height:1.6}
+.no-spend-praise-actions .secondary{flex:none}
