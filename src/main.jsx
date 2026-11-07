@@ -19,7 +19,7 @@ function ReviewRatingPicker({value,onChange,showReset=false}){
 const START={expenses:[],fixed:[],tax:[],budgets:{},monthlyBudget:1000000,monthlyBudgets:{},categoryBudgetsByMonth:{},goals:{},savedViews:[],plans:[],budgetCalculations:{},kpiTargets:{noSpendDays:12,reserve:0},kpiSettings:{}};
 function normalizeInsuranceData(input){if(!input||typeof input!=='object')return input;const fixExpense=e=>e.category==='구독'&&(e.subcategory==='보험료'||(e.items||[]).some(i=>i.type==='보험료'))?{...e,category:'보험비',subcategory:'',items:(e.items||[]).map(i=>i.type==='보험료'?{...i,type:''}:i)}:e;return {...input,expenses:Array.isArray(input.expenses)?input.expenses.map(fixExpense):[],fixed:Array.isArray(input.fixed)?input.fixed.map(f=>f.category==='보험료'?{...f,category:'보험비'}:f):[],goals:input.goals||{}};}
 function Icon({type,...p}){const map={up:TrendingUp,down:TrendingDown,only:Notebook};const Comp=map[type]||Info;return <Comp {...p}/>}
-function App({initialStore,onPersist,onLogout,accountEmail}){const [store,setStore]=useState(()=>({...START,...initialStore}));const [tab,setTab]=useState('예산');const [planEditor,setPlanEditor]=useState(null);const [expenseTypeFilter,setExpenseTypeFilter]=useState('planned');const [classificationPeriod,setClassificationPeriod]=useState('period');const [planFilter,setPlanFilter]=useState('전체');const [planInnerTab,setPlanInnerTab]=useState('list');const [calcOpen,setCalcOpen]=useState(null);const [calcHistoryOffset,setCalcHistoryOffset]=useState(1);const [calcTotalOpen,setCalcTotalOpen]=useState(false);const [month,setMonth]=useState(ym(today()));const [editor,setEditor]=useState(null);const [notice,setNotice]=useState('');const [refOpen,setRefOpen]=useState(false);const [refCat,setRefCat]=useState('식료품');const [subTab,setSubTab]=useState('fixed');const [fixedFilter,setFixedFilter]=useState('전체');const [selectedDate,setSelectedDate]=useState(today());const [expandedBudget,setExpandedBudget]=useState(null);const [budgetSort,setBudgetSort]=useState(null);const [period,setPeriod]=useState('month');const [metric,setMetric]=useState('amount');const [analysisCat,setAnalysisCat]=useState(null);const [analysisType,setAnalysisType]=useState('category');const [analysisDetail,setAnalysisDetail]=useState(null);const [reviewFolder,setReviewFolder]=useState('inbox');const [analysisExpensesOpen,setAnalysisExpensesOpen]=useState(false);const [fixedEditor,setFixedEditor]=useState(null);const [taxEditor,setTaxEditor]=useState(null);const [showSettings,setShowSettings]=useState(false);const [showKPI,setShowKPI]=useState(false);
+function App({initialStore,onPersist,onLogout,accountEmail}){const [store,setStore]=useState(()=>({...START,...initialStore}));const [tab,setTab]=useState('예산');const [planEditor,setPlanEditor]=useState(null);const [expenseTypeFilter,setExpenseTypeFilter]=useState('planned');const [classificationPeriod,setClassificationPeriod]=useState('period');const [planFilter,setPlanFilter]=useState('전체');const [planInnerTab,setPlanInnerTab]=useState('list');const [calcOpen,setCalcOpen]=useState(null);const [calcHistoryOffset,setCalcHistoryOffset]=useState(1);const [calcTotalOpen,setCalcTotalOpen]=useState(false);const [month,setMonth]=useState(ym(today()));const [editor,setEditor]=useState(null);const [notice,setNotice]=useState('');const [refOpen,setRefOpen]=useState(false);const [refCat,setRefCat]=useState('식료품');const [subTab,setSubTab]=useState('fixed');const [fixedFilter,setFixedFilter]=useState('전체');const [selectedDate,setSelectedDate]=useState(today());const [expandedBudget,setExpandedBudget]=useState(null);const [budgetSort,setBudgetSort]=useState(null);const [period,setPeriod]=useState('month');const [metric,setMetric]=useState('amount');const [analysisCat,setAnalysisCat]=useState(null);const [analysisType,setAnalysisType]=useState('category');const [analysisDetail,setAnalysisDetail]=useState(null);const [reviewFolder,setReviewFolder]=useState('inbox');const [analysisExpensesOpen,setAnalysisExpensesOpen]=useState(false);const [spendInsightTab,setSpendInsightTab]=useState('spike');const [fixedEditor,setFixedEditor]=useState(null);const [taxEditor,setTaxEditor]=useState(null);const [showSettings,setShowSettings]=useState(false);const [showKPI,setShowKPI]=useState(false);
 const initialRender=React.useRef(true);
 useEffect(()=>{if(initialRender.current){initialRender.current=false;return}onPersist(store)},[store,onPersist]);
 const update=(key,value)=>setStore(s=>({...s,[key]:typeof value==='function'?value(s[key]):value}));
@@ -116,6 +116,26 @@ const ratedCount=ratedExpenses.length;
 const ratedAmount=ratedExpenses.reduce((total,e)=>total+Number(e.amount||0),0);
 const reviewStats=REVIEW_OPTIONS.map(option=>{const list=ratedExpenses.filter(e=>e.reviewRating===option.value);return {...option,count:list.length,amount:list.reduce((total,e)=>total+Number(e.amount||0),0),percent:ratedCount?list.length/ratedCount*100:0};});
 const openReviewFolder=folder=>{setReviewFolder(folder);setTab('회고')};
+const spendingDates=periodExpenses.reduce((acc,e)=>{const date=e.date;if(!date||!(Number(e.amount)>0))return acc;const record=acc.get(date)||{date,amount:0,rows:[]};record.amount+=Number(e.amount);record.rows.push(e);acc.set(date,record);return acc;},new Map());
+const dailySpends=[...spendingDates.values()].sort((a,b)=>b.amount-a.amount);
+const avgSpendingDay=dailySpends.length?dailySpends.reduce((total,d)=>total+d.amount,0)/dailySpends.length:0;
+// A spike means at least 150% of the average day with spending, requiring two such days for comparison.
+const spikeDays=dailySpends.length<2?[]:dailySpends.filter(d=>d.amount>=avgSpendingDay*1.5).slice(0,5);
+const currentMonth=today().slice(0,7);
+const currentMonthLastDay=Number(today().slice(8));
+const monthExpenseDays=new Set(store.expenses.filter(e=>e.date?.slice(0,7)===currentMonth&&Number(e.amount)>0&&e.date<=today()).map(e=>e.date));
+const noSpendStreaks=[];let streakStart=null,streakLength=0;
+for(let day=1;day<=currentMonthLastDay;day++){
+ const dayKey=currentMonth+'-'+String(day).padStart(2,'0');
+ if(!monthExpenseDays.has(dayKey)){if(streakStart===null)streakStart=day;streakLength++;}
+ else if(streakLength){noSpendStreaks.push({start:streakStart,end:day-1,length:streakLength});streakStart=null;streakLength=0;}
+}
+if(streakLength)noSpendStreaks.push({start:streakStart,end:currentMonthLastDay,length:streakLength});
+const bestNoSpendStreak=noSpendStreaks.length?Math.max(...noSpendStreaks.map(x=>x.length)):0;
+const bestNoSpendRuns=noSpendStreaks.filter(x=>x.length===bestNoSpendStreak&&bestNoSpendStreak>0);
+const currentNoSpendRun=noSpendStreaks.find(x=>x.end===currentMonthLastDay)?.length||0;
+const formatRunDate=day=>currentMonth.slice(5)+'/'+String(day).padStart(2,'0');
+
 
 const periodName=period==='week'?'7일':period==='month'?'이번 달':period==='three'?'3개월':period==='six'?'6개월':'1년';
 const trendTitle=period==='week'?'최근 7일 일별 지출 추이':period==='month'?'이번 달 일별 지출 추이':period==='three'?'최근 3개월 월별 지출 추이':period==='six'?'최근 6개월 월별 지출 추이':'최근 1년 월별 지출 추이';
@@ -148,6 +168,30 @@ const chartData=(()=>{
 <p className="muted small">비율은 평가한 지출 {ratedCount}건 중 건수 기준이야. 평가한 지출 합계 {won(ratedAmount)}.</p>
 </>:<p className="muted small satisfaction-empty">아직 평가한 소비가 없어. 회고 탭에서 좋아요·그럭저럭·별로예요를 선택해줘.</p>}
 {periodExpenses.length>ratedCount&&<button type="button" className="secondary full satisfaction-inbox-link" onClick={()=>openReviewFolder('inbox')}>미평가 지출 회고하기 <ChevronRight size={15}/></button>}
+</section><section className="card spending-insights">
+ <h2>소비 패턴 발견</h2>
+ <div className="spending-insights-tabs" role="group" aria-label="소비 패턴 분석">
+  <button type="button" className={spendInsightTab==='spike'?'selected':''} aria-pressed={spendInsightTab==='spike'} onClick={()=>setSpendInsightTab('spike')}>미친 소비날</button>
+  <button type="button" className={spendInsightTab==='no-spend'?'selected':''} aria-pressed={spendInsightTab==='no-spend'} onClick={()=>setSpendInsightTab('no-spend')}>무지출 연속</button>
+ </div>
+ {spendInsightTab==='spike'?<div className="spending-spike-panel">
+  <div className="spread"><h3>미친 소비날</h3><small>{periodName} 기준</small></div>
+  <p className="muted small">지출이 있었던 날의 평균 {won(Math.round(avgSpendingDay))}보다 50% 이상 많이 쓴 날을 찾아줘.</p>
+  {spikeDays.length?spikeDays.map(d=><div className="spending-spike-day" key={d.date}>
+   <div className="spread spending-spike-heading"><b>{d.date}</b><strong>{won(d.amount)}</strong></div>
+   <p className="muted small">평균의 {(d.amount/avgSpendingDay).toFixed(1)}배 · {d.rows.length}건</p>
+   {expenseRows(d.rows)}
+  </div>):<p className="muted small spending-insights-empty">{dailySpends.length<2?'비교할 지출 날짜가 2일 이상 쌓이면 급증한 날을 찾아줄게.':'선택한 기간에 평균의 1.5배 이상 지출한 날이 없어.'}</p>}
+ </div>:<div className="no-spend-panel">
+  <div className="spread"><h3>이번 달 연속 무지출</h3><small>{currentMonth.replace('-','년 ')}월</small></div>
+  <div className="no-spend-stats">
+    <div><small>최장 연속</small><strong>{bestNoSpendStreak}일</strong></div>
+    <div><small>현재 연속</small><strong>{currentNoSpendRun}일</strong></div>
+    <div><small>총 무지출</small><strong>{currentMonthLastDay-monthExpenseDays.size}일</strong></div>
+  </div>
+  {bestNoSpendRuns.length?<div className="no-spend-runs"><b>최장 기록 날짜</b>{bestNoSpendRuns.map(run=><p key={run.start}>{formatRunDate(run.start)} ~ {formatRunDate(run.end)} · {run.length}일</p>)}</div>:<p className="muted small spending-insights-empty">이번 달에는 아직 무지출 날짜가 없어.</p>}
+  <p className="muted small">이번 달 1일부터 오늘까지 실제 지출 금액이 0원인 날을 기준으로 계산해. 고정비·세금 지출도 포함하고, 미래 날짜는 제외해.</p>
+ </div>}
 </section></div>};
 const renderBills=()=> <div className="page"><div className="topline"><div><h1>고정비 · 세금</h1><p>정기 결제와 개인 납부 일정</p></div></div><div className="seg wide"><button className={subTab==='fixed'?'sel':''} onClick={()=>setSubTab('fixed')}>고정비</button><button className={subTab==='tax'?'sel':''} onClick={()=>setSubTab('tax')}>세금</button></div>{subTab==='fixed'?<><div className="duo"><div className="card stat"><small>{fixedFilter==='전체'?'등록된 월 고정비':`${fixedFilter} 월 고정비 합계`}</small><strong>{won(filteredFixedMonthly)}</strong></div><div className="card stat"><small>{fixedFilter==='전체'?'연간 환산액':`${fixedFilter} 연간 환산액`}</small><strong>{won(filteredFixedMonthly*12)}</strong></div></div><div className="fixed-filter-tags" role="group" aria-label="고정비 항목별 필터">{fixedFilterOptions.map(c=><button type="button" key={c} className={"fixed-filter-tag "+(fixedFilter===c?"active":"")} aria-pressed={fixedFilter===c} onClick={()=>setFixedFilter(c)}>{c}</button>)}</div><button className="primary full" onClick={()=>setFixedEditor({id:uid(),name:'',category:'통신비',amount:'',day:1,frequency:'monthly',active:true,monthly:true})}><Plus size={16}/> 고정비 추가</button>{filteredFixed.map(f=><div className="card" key={f.id}><div className="spread"><div><b>{f.name}</b><p className="muted small">{f.category} · 매월 {f.day}일</p></div><b>{won(f.amount)}</b></div><div className="actions"><button className="secondary" onClick={()=>setFixedEditor(f)}><Edit3 size={14}/> 수정</button><button className="ghost" onClick={()=>{if(window.confirm('삭제할까?'))update('fixed',a=>a.filter(x=>x.id!==f.id))}}><Trash2 size={14}/> 삭제</button><button className="secondary" onClick={()=>showEditor({id:uid(),date:today(),category:f.category==='보험비'?'보험비':'구독',subcategory:f.category==='보험비'?'':f.category,amount:f.amount,memo:f.name,items:[],fixedId:f.id})}>지출 기록</button></div></div>)}{!filteredFixed.length&&<div className="card empty">{store.fixed.length?'선택한 구분에 등록된 고정비가 없어.':'통신비·보험비·AI·클라우드 등 정기결제를 등록해봐.'}</div>}</>:<><div className="card note"><b>개인별 세금 일정</b><p>신고·납부 기한은 개인 상황과 연도에 따라 달라. 정확한 날짜는 고지서·공식 안내를 확인하고 등록해줘.</p></div><button className="primary full" onClick={()=>setTaxEditor({id:uid(),name:'',date:today(),kind:'납부',amount:'',paid:false,category:'국세'})}><Plus size={16}/> 세금 일정 추가</button>{store.tax.sort((a,b)=>a.date.localeCompare(b.date)).map(t=><div className="card" key={t.id}><div className="spread"><div><b>{t.name}</b><p className="muted small">{t.date} · {t.kind} · {t.category}</p></div><strong>{t.amount?won(t.amount):'금액 미정'}</strong></div><div className="actions"><button className="secondary" onClick={()=>setTaxEditor(t)}><Edit3 size={14}/> 수정</button><button className="secondary" onClick={()=>update('tax',a=>a.map(x=>x.id===t.id?{...x,paid:!x.paid}:x))}>{t.paid?'완료 ✓':'완료 표시'}</button><button className="ghost" onClick={()=>{if(window.confirm('삭제할까?'))update('tax',a=>a.filter(x=>x.id!==t.id))}}><Trash2 size={14}/></button>{t.kind==='납부'&&t.amount&&!t.expenseId&&<button className="secondary" onClick={()=>{const e={id:uid(),date:t.date,category:'세금',amount:t.amount,memo:t.name,items:[],taxId:t.id};update('expenses',a=>[e,...a]);update('tax',a=>a.map(x=>x.id===t.id?{...x,paid:true,expenseId:e.id}:x));notify('실제 지출에 한 번만 반영했어.')}}>지출 반영</button>}</div></div>)}{!store.tax.length&&<div className="card empty">개인에게 해당하는 세금 신고·납부일을 등록해줘.</div>}</>}</div>;
 const calculations=store.budgetCalculations?.[month]||{};
