@@ -582,3 +582,16 @@ a,a:visited{color:var(--sf-purple-deep)}
 .no-spend-praise-log-entry>p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;font-size:14px;margin:9px 0}
 .no-spend-praise-log-edit{display:flex;flex-direction:column;gap:9px;margin-top:10px}
 .no-spend-praise-log-edit textarea{width:100%;min-height:80px;background:#fff;color:#34313d;font-size:16px;line-height:1.5;padding:11px;border:1px solid #e6def1;border-radius:10px;resize:vertical}
+
+/* Compact, initially collapsed analysis accordions */
+.analysis-accordion{min-width:0;background:#fff;border:1px solid #e9e1f0;border-radius:19px;overflow:hidden;box-shadow:0 3px 16px #6e5f8b0a}
+.analysis-accordion>summary{min-height:64px;padding:17px;display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer;font-size:16px;font-weight:800;color:#34313d;list-style:none}
+.analysis-accordion>summary::-webkit-details-marker{display:none}
+.analysis-accordion>summary::marker{content:''}
+.analysis-accordion>summary>span{min-width:0}
+.analysis-accordion>summary>svg{flex:none;color:#927eb1;transition:transform .15s ease}
+.analysis-accordion[open]>summary>svg{transform:rotate(180deg)}
+.analysis-accordion[open]>summary{border-bottom:1px solid #f0e9f3}
+.analysis-accordion>.card{border:0;border-radius:0;box-shadow:none;padding-top:12px}
+.analysis-accordion>.card>.spread:first-child h2,.analysis-accordion>.card>h2:first-child{display:none}
+.analysis-accordion:focus-within{border-color:#c4b1e4}
