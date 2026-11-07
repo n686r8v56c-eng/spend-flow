@@ -570,3 +570,15 @@ a,a:visited{color:var(--sf-purple-deep)}
 .no-spend-praise-heading>.secondary{min-height:34px;padding:7px 10px;font-size:12px;flex:none}
 .no-spend-praise-saved{white-space:pre-wrap;overflow-wrap:anywhere;background:#fff;border:1px solid #e9e0f1;border-radius:10px;padding:12px 13px;margin:0;font-size:15px;color:#38323e;line-height:1.6}
 .no-spend-praise-actions .secondary{flex:none}
+
+/* Archive of monthly no-spend praise, matching the spending-spike log */
+.no-spend-praise-archive{border-top:1px solid #e9e1ef;margin-top:19px;padding-top:18px}
+.no-spend-praise-archive>.spread{align-items:center;gap:8px}
+.no-spend-praise-archive>.spread h3{margin:0}
+.no-spend-praise-archive>.spread small{font-size:12px;color:#93889b}
+.no-spend-praise-log-entry{border-bottom:1px solid #eee8f3;padding:13px 0}
+.no-spend-praise-log-entry:last-child{border-bottom:0}
+.no-spend-praise-log-entry>strong{display:block;font-size:14px;color:#8065af}
+.no-spend-praise-log-entry>p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;font-size:14px;margin:9px 0}
+.no-spend-praise-log-edit{display:flex;flex-direction:column;gap:9px;margin-top:10px}
+.no-spend-praise-log-edit textarea{width:100%;min-height:80px;background:#fff;color:#34313d;font-size:16px;line-height:1.5;padding:11px;border:1px solid #e6def1;border-radius:10px;resize:vertical}
