@@ -47,7 +47,7 @@ function normalizeInsuranceData(input){if(!input||typeof input!=='object')return
 function Icon({type,...p}){const map={up:TrendingUp,down:TrendingDown,only:Notebook};const Comp=map[type]||Info;return <Comp {...p}/>}
 function GenreHeader({genre,onChange}){
  return <header className="flow-genre-header">
- <strong className="flow-genre-title">Spend <span>Flow</span></strong>
+ <strong className="flow-genre-title">{genre==='income'?'Income':'Spend'} <span>Flow</span></strong>
  <label className="flow-genre-picker"><span className="flow-genre-sr-only">장르 선택</span>
  <select aria-label="장르 선택" value={genre} onChange={e=>onChange(e.target.value)}>
  <option value="spend">SPEND</option><option value="income">INCOME</option>
