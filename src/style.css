@@ -597,3 +597,13 @@ a,a:visited{color:var(--sf-purple-deep)}
 .analysis-accordion:focus-within{border-color:#c4b1e4}
 
 .analysis-accordion>.satisfaction-analysis>.spread:first-child h2{display:none}
+
+/* Shared Spend / Income genre switcher. Keeps both modules' records separate. */
+.flow-genre-header{position:sticky;top:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:54px;padding:8px max(16px,env(safe-area-inset-right));background:rgba(255,255,255,.97);border-bottom:1px solid #ede5f4}
+.flow-genre-title{font-size:17px;letter-spacing:-.035em;white-space:nowrap;color:#3c304a}
+.flow-genre-title span{color:#9875c1}
+.flow-genre-picker{display:flex;align-items:center;margin-left:auto}
+.flow-genre-picker select{width:auto;max-width:150px;min-width:100px;appearance:auto;border:1px solid #d9c8e9;border-radius:11px;padding:8px 10px;background:#f7f0fd;color:#7951a5;font-size:14px;font-weight:750;cursor:pointer}
+.flow-genre-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.income-embed-root{min-height:calc(100dvh - 54px);display:block;width:100%;isolation:isolate}
+@media(max-width:440px){.flow-genre-header{padding:8px 12px}.flow-genre-title{font-size:16px}.flow-genre-picker select{font-size:13px;min-width:90px}}
