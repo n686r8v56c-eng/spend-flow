@@ -7,14 +7,14 @@ export function SavingsPanel({fixed=[],changes=[],onSave,onDelete}){
  const [form,setForm]=useState(null),[expanded,setExpanded]=useState({});
  const now=dateToday();
  const sorted=[...changes].sort((a,b)=>a.effectiveDate.localeCompare(b.effectiveDate)||String(a.createdAt||'').localeCompare(String(b.createdAt||'')));
- const counted=sorted.map((item,i)=>{
-   const next=sorted.slice(i+1).find(n=>n.fixedId===item.fixedId&&n.effectiveDate>=item.effectiveDate);
-   const end=next?.effectiveDate||now;
-   const months=monthDiff(item.effectiveDate,end);
+ const counted=sorted.map(item=>{
+   const months=monthDiff(item.effectiveDate,now);
    const delta=Number(item.previousAmount)-Number(item.newAmount);
-   return {...item,months,delta,realized:delta*months,ongoing:!next};
+   return {...item,months,delta,realized:delta*months};
  });
- const monthly=counted.filter(x=>x.ongoing&&x.effectiveDate<=now).reduce((s,x)=>s+x.delta,0);
+ // Each change adds an incremental saving relative to the preceding price.
+ // Earlier improvements continue to save money even after later price changes.
+ const monthly=counted.filter(x=>x.effectiveDate<=now).reduce((s,x)=>s+x.delta,0);
  const realized=counted.reduce((s,x)=>s+x.realized,0);
  const groups=[...new Set(counted.map(x=>x.fixedId))].map(id=>({id,records:counted.filter(x=>x.fixedId===id).reverse()}));
  const start=f=>setForm({id:undefined,fixedId:f?.id||'',name:f?.name||'',category:f?.category||'기타',previousAmount:f?.amount??'',newAmount:'',effectiveDate:now});
